@@ -1,0 +1,65 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<h3><a href="{% url 'export' %}">Export</a> |  <a href="{% url 'receipt' %}">Print</a></h3>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Make Request
+            </div>
+            <div class="card card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input class="btn btn-info btn-block" type="submit" value="Make Request">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table class="table bg-white">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col">Dated</th>
+                    <th scope="col">Update</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ sale.product.name }}</td>
+                    <td>{{ sale.quantity }}</td>
+                    <td>{{ sale.product.price }}</td>
+                    <td>{{ sale.sub_total }}</td>
+                    <td>{{sale.created_at}}</td>
+                    <td><a class="btn btn-info btn-sm mr-2" href="{% url 'saleedit' sale.id %}">Edit</a>    
+                    <a class="btn btn-danger btn-sm mr-2" href="{% url 'saledelete' sale.id %}">Delete</a></td>
+
+                   
+                </tr>
+        
+                {% endfor %}
+                <tr>
+                    <td colspan="4"> Grand Total: {{total}}</td>
+                    
+                </tr>
+                <tr>
+                    {% for total in gtotals %}
+                    <td>Dated:{{total.created_at}}</td>
+                    <td>Grand Total {{total.grand_total}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

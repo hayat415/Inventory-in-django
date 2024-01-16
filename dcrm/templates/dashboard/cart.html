@@ -1,0 +1,64 @@
+{% extends 'partials/base.html' %}
+
+{% block content %} 
+
+{% load crispy_forms_tags %}
+<div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Make Request
+                </div>
+                <div class="card card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <input class="btn btn-info btn-block" type="submit" value="Make Request">
+                        <a href="{% url 'checkout' %}">checkout</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Orders Records
+                </div>
+                <div class="card-body">
+                    <table class="table bg-white">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">customer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+                            
+                            {% for sa in carts.sale_set.all %}
+                            <tr>
+                                <td>{{sa.product.name}}</td>
+                                <td>{{sa.quantity}}</td>
+                                <td>{{sa.product.price}}</td>
+                                <td>{{sa.sub_total}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                  <th >Total</th>  
+                                  <td >{{carts.total}}</td>
+
+                            </tr>
+                           
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
